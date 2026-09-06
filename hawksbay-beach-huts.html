@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hawksbay Beach Huts — Karachi</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500;1,6..72,600&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sand:#EDE0C0; --sand-light:#F7F1DE; --deep-sea:#0E4B5A; --deep-sea-dark:#0A3540;
+    --coral:#E76F51; --ink:#1B2B2B; --foam:#FAF6EC; --seagrass:#588157; --gold:#D9A441;
+    --busy:#C0392B; --avail:#3E7A45; --wa:#25D366;
+    --bs-primary:#0E4B5A; --bs-primary-rgb:14,75,90;
+  }
+  body{font-family:'Karla',sans-serif; background:var(--foam); color:var(--ink);}
+  h1,h2,h3,h4,.serif{font-family:'Newsreader',serif; font-weight:600;}
+  .btn-coral{background:var(--coral); border-color:var(--coral); color:#fff;}
+  .btn-coral:hover{background:#d65f3f; border-color:#d65f3f; color:#fff;}
+  .btn-outline-coral{border-color:var(--coral); color:var(--coral);}
+  .btn-outline-coral:hover{background:var(--coral); color:#fff;}
+  .text-coral{color:var(--coral);}
+  .bg-deepsea{background:var(--deep-sea) !important;}
+  .bg-sand{background:var(--sand-light) !important;}
+  .navbar-brand em{font-style:italic; color:var(--coral);}
+  .navbar{box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+
+  .hero{
+    position:relative; color:#fff; min-height:78vh; display:flex; align-items:center;
+    background:linear-gradient(180deg, rgba(10,53,64,0.78), rgba(10,53,64,0.88)), url('__HERO_BG__') center/cover no-repeat;
+  }
+  .hero h1{font-size:3rem; line-height:1.1;}
+  .hero h1 i{font-style:italic; color:var(--gold);}
+  .hero-stats .num{font-family:'Newsreader',serif; font-size:1.6rem; font-weight:700;}
+  .hero-stats .lbl{font-size:0.8rem; opacity:0.75;}
+
+  .ad-slot{border:2px dashed #c9c2a8; background:#fbf8ef; color:#8a8266; text-align:center; padding:22px; border-radius:8px; font-size:0.85rem;}
+  .ad-slot .ad-label{font-weight:700; letter-spacing:0.04em; font-size:0.72rem; color:#a99b6c; text-transform:uppercase; margin-bottom:6px; display:block;}
+
+  .hut-card{border:none; border-radius:14px; overflow:hidden; box-shadow:0 6px 20px rgba(14,75,90,0.08); transition:transform .2s ease, box-shadow .2s ease; height:100%;}
+  .hut-card:hover{transform:translateY(-5px); box-shadow:0 14px 28px rgba(14,75,90,0.16);}
+  .hut-card img{height:190px; object-fit:cover;}
+  .stamp{position:absolute; top:12px; right:12px; z-index:3; font-family:'Newsreader',serif; font-weight:700; font-size:0.75rem; padding:5px 12px; border:2px solid; border-radius:4px; transform:rotate(6deg); background:rgba(255,255,255,0.92); text-transform:uppercase;}
+  .stamp.available{color:var(--avail); border-color:var(--avail);}
+  .stamp.busy{color:var(--busy); border-color:var(--busy);}
+  .hut-tag{position:absolute; top:12px; left:12px; z-index:3;}
+  .hut-price{font-family:'Newsreader',serif; color:var(--coral); font-weight:700; font-size:1.3rem;}
+  .facil-item{background:var(--deep-sea-dark); border-radius:10px; padding:26px 18px; height:100%;}
+  .facil-item svg{width:28px; height:28px; stroke:var(--gold); margin-bottom:10px;}
+  .price-table th{background:var(--sand-light);}
+  .price-table td.hl{color:var(--coral); font-weight:700;}
+  .testi-card{border:none; border-radius:14px; background:var(--sand-light); height:100%;}
+  .testi-avatar{width:38px; height:38px; border-radius:50%; background:var(--deep-sea); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-family:'Newsreader',serif;}
+  footer{background:var(--deep-sea-dark); color:rgba(255,255,255,0.85);}
+  footer a{color:rgba(255,255,255,0.8);}
+  footer a:hover{color:var(--gold);}
+  .dev-strip{border-top:1px solid rgba(255,255,255,0.12);}
+  .dev-avatar{width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,var(--coral),var(--gold)); display:flex; align-items:center; justify-content:center; font-family:'Newsreader',serif; font-weight:700; color:#fff; flex:none;}
+
+  .wa-float{position:fixed; bottom:22px; inset-inline-end:22px; z-index:1050; width:58px; height:58px; border-radius:50%; background:var(--wa); display:flex; align-items:center; justify-content:center; box-shadow:0 6px 16px rgba(0,0,0,0.25); color:#fff;}
+  .wa-float svg{width:30px; height:30px;}
+
+  .filter-btn.active{background:var(--deep-sea); border-color:var(--deep-sea); color:#fff;}
+  .add-hut-btn{display:none;}
+  body.admin-on .add-hut-btn{display:inline-flex;}
+  .admin-row{display:none; gap:6px;}
+  body.admin-on .admin-row{display:flex;}
+  .comment-item{border-bottom:1px solid #eee; padding:10px 0;}
+  .comment-item:last-child{border-bottom:none;}
+  .comment-name{font-weight:700; font-size:0.9rem; color:var(--deep-sea-dark);}
+  .comment-date{font-size:0.72rem; color:#8a97972; color:#8a9797;}
+  .modal-content{border-radius:14px;}
+  .lang-btn{border-radius:20px;}
+  .admin-btn-nav.is-admin{outline:2px solid var(--coral);}
+  @media(max-width:768px){ .hero h1{font-size:2.1rem;} .hero{min-height:60vh;} }
+</style>
+</head>
+<body>
+
+<!-- ===================== NAVBAR ===================== -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+  <div class="container">
+    <a class="navbar-brand serif fw-bold" href="#top" style="color:var(--deep-sea-dark);">Hawksbay <em>Huts</em></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav mx-auto gap-lg-3">
+        <li class="nav-item"><a class="nav-link" href="#huts" data-i18n="nav_huts"></a></li>
+        <li class="nav-item"><a class="nav-link" href="#facilities" data-i18n="nav_facilities"></a></li>
+        <li class="nav-item"><a class="nav-link" href="#pricing" data-i18n="nav_pricing"></a></li>
+        <li class="nav-item"><a class="nav-link" href="#booking" data-i18n="nav_booking"></a></li>
+        <li class="nav-item"><a class="nav-link" href="#reviews" data-i18n="nav_reviews"></a></li>
+      </ul>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <span id="userGreetWrap" class="d-none small fw-semibold text-secondary"></span>
+        <button class="btn btn-sm btn-outline-secondary" id="authBtn"></button>
+        <button class="btn btn-sm btn-outline-secondary admin-btn-nav" id="adminToggle"></button>
+        <button class="btn btn-sm btn-outline-secondary lang-btn" id="langToggle">EN</button>
+        <button class="btn btn-sm btn-coral" id="navBookBtn" data-i18n="nav_cta"></button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero" id="top">
+  <div class="container py-5">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <span class="badge rounded-pill bg-light text-dark mb-3 px-3 py-2" data-i18n="hero_eyebrow"></span>
+        <h1 class="fw-semibold mb-3" data-i18n="hero_h1" data-i18n-html="1"></h1>
+        <p class="lead mb-4" style="max-width:560px; opacity:0.92;" data-i18n="hero_lead"></p>
+        <div class="d-flex gap-2 flex-wrap mb-4">
+          <button class="btn btn-coral btn-lg px-4" data-i18n="hero_cta_huts" onclick="document.getElementById('huts').scrollIntoView({behavior:'smooth'})"></button>
+          <button class="btn btn-outline-light btn-lg px-4" data-i18n="hero_cta_price" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})"></button>
+        </div>
+        <div class="d-flex gap-4 hero-stats flex-wrap">
+          <div><div class="num" id="statHuts">14+</div><div class="lbl" data-i18n="stat_huts"></div></div>
+          <div><div class="num">Rs 3,500</div><div class="lbl" data-i18n="stat_price"></div></div>
+          <div><div class="num">24/7</div><div class="lbl" data-i18n="stat_security"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Ad slot: leaderboard -->
+<div class="container my-4">
+  <div class="ad-slot"><span class="ad-label" data-i18n="ad_label"></span>728 x 90 — <span data-i18n="ad_contact"></span></div>
+</div>
+
+<!-- ===================== HUTS ===================== -->
+<section class="py-5" id="huts">
+  <div class="container">
+    <div class="mb-4" style="max-width:640px;">
+      <span class="text-coral fw-semibold small d-block mb-2" data-i18n="huts_kicker"></span>
+      <h2 style="color:var(--deep-sea-dark);" data-i18n="huts_title"></h2>
+      <p class="text-secondary" data-i18n="huts_sub"></p>
+    </div>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4" id="filterBar">
+      <div class="d-flex gap-2 flex-wrap">
+        <button class="btn btn-sm btn-outline-secondary rounded-pill filter-btn active" data-filter="all" data-i18n="filter_all"></button>
+        <button class="btn btn-sm btn-outline-secondary rounded-pill filter-btn" data-filter="standard" data-i18n="filter_standard"></button>
+        <button class="btn btn-sm btn-outline-secondary rounded-pill filter-btn" data-filter="deluxe" data-i18n="filter_deluxe"></button>
+        <button class="btn btn-sm btn-outline-secondary rounded-pill filter-btn" data-filter="family" data-i18n="filter_family"></button>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="availOnly">
+          <label class="form-check-label small fw-semibold" for="availOnly" data-i18n="filter_avail_only"></label>
+        </div>
+        <button class="btn btn-sm btn-coral add-hut-btn" id="addHutBtn">+ <span data-i18n="admin_add_hut"></span></button>
+      </div>
+    </div>
+    <div class="row g-4" id="hutGrid"></div>
+  </div>
+</section>
+
+<!-- Ad slot: in-feed -->
+<div class="container my-2 mb-5">
+  <div class="ad-slot"><span class="ad-label" data-i18n="ad_label"></span>970 x 250 — <span data-i18n="ad_contact"></span></div>
+</div>
+
+<!-- ===================== FACILITIES ===================== -->
+<section class="py-5 bg-deepsea text-white" id="facilities">
+  <div class="container">
+    <div class="mb-4 mx-auto text-center" style="max-width:640px;">
+      <span class="fw-semibold small d-block mb-2" style="color:var(--gold)" data-i18n="facil_kicker"></span>
+      <h2 data-i18n="facil_title"></h2>
+      <p style="opacity:0.75" data-i18n="facil_sub"></p>
+    </div>
+    <div class="row g-3" id="facilGrid"></div>
+  </div>
+</section>
+
+<!-- ===================== PRICING ===================== -->
+<section class="py-5" id="pricing">
+  <div class="container">
+    <div class="mb-4" style="max-width:640px;">
+      <span class="text-coral fw-semibold small d-block mb-2" data-i18n="price_kicker"></span>
+      <h2 style="color:var(--deep-sea-dark);" data-i18n="price_title"></h2>
+      <p class="text-secondary" data-i18n="price_sub"></p>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered price-table align-middle bg-white">
+        <thead><tr>
+          <th data-i18n="price_th_type"></th><th data-i18n="price_th_cap"></th><th data-i18n="price_th_wd"></th><th data-i18n="price_th_we"></th>
+        </tr></thead>
+        <tbody>
+          <tr><td data-i18n="price_r1_type"></td><td data-i18n="price_r1_cap"></td><td>Rs 3,500</td><td class="hl">Rs 5,000</td></tr>
+          <tr><td data-i18n="price_r2_type"></td><td data-i18n="price_r2_cap"></td><td>Rs 5,500</td><td class="hl">Rs 7,500</td></tr>
+          <tr><td data-i18n="price_r3_type"></td><td data-i18n="price_r3_cap"></td><td>Rs 8,000</td><td class="hl">Rs 11,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-secondary small" data-i18n="price_note"></p>
+  </div>
+</section>
+
+<!-- ===================== BOOKING ===================== -->
+<section class="py-5 bg-sand" id="booking">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-7">
+        <span class="text-coral fw-semibold small d-block mb-2" data-i18n="booking_kicker"></span>
+        <h2 class="mb-3" style="color:var(--deep-sea-dark);" data-i18n="booking_title"></h2>
+        <p class="text-secondary mb-4" data-i18n="booking_sub"></p>
+        <form id="bookingForm" class="bg-white p-4 rounded-4 shadow-sm">
+          <div class="mb-3">
+            <label class="form-label fw-semibold" data-i18n="form_name"></label>
+            <input type="text" class="form-control" id="bName" required>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold" data-i18n="form_phone"></label>
+              <input type="tel" class="form-control" id="bPhone" placeholder="03xx-xxxxxxx" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold" data-i18n="form_date"></label>
+              <input type="date" class="form-control" id="bDate" required>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold" data-i18n="form_type"></label>
+            <select class="form-select" id="bType"></select>
+          </div>
+          <button type="submit" class="btn btn-coral w-100 py-2 fw-semibold" data-i18n="form_submit"></button>
+          <div class="alert alert-success mt-3 d-none" id="formMsg" data-i18n="form_success"></div>
+        </form>
+      </div>
+      <div class="col-lg-5">
+        <div class="d-flex align-items-center gap-2 mb-3 fw-semibold" style="color:var(--deep-sea-dark);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          0304-1291775
+        </div>
+        <div class="d-flex align-items-center gap-2 mb-3 fw-semibold" style="color:var(--deep-sea-dark);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span data-i18n="booking_address"></span>
+        </div>
+        <div class="d-flex align-items-center gap-2 mb-4 fw-semibold" style="color:var(--deep-sea-dark);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          info@hawksbayhuts.pk
+        </div>
+        <button class="btn btn-lg w-100 mb-4 text-white fw-semibold" style="background:var(--wa);" id="waDirectBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-4px; margin-inline-end:6px;"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.47 3.47 1.29 4.93L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.13c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.12.11-1.8-.11-.42-.13-.96-.3-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.02-2.41.27-.29.58-.36.78-.36.19 0 .39 0 .56.01.18.01.42-.07.65.5.24.58.82 2.01.89 2.16.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.16-.29.36-.42.49-.14.14-.28.29-.12.57.16.28.7 1.16 1.51 1.87 1.04.93 1.92 1.22 2.19 1.36.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.18-.27.36-.22.6-.13.24.09 1.53.72 1.79.85.27.13.44.19.51.3.07.11.07.62-.17 1.3z"/></svg>
+          <span data-i18n="wa_direct_btn"></span>
+        </button>
+        <div class="ad-slot"><span class="ad-label" data-i18n="ad_label"></span>300 x 400 — <span data-i18n="ad_contact"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TESTIMONIALS ===================== -->
+<section class="py-5" id="reviews">
+  <div class="container">
+    <div class="mb-4" style="max-width:640px;">
+      <span class="text-coral fw-semibold small d-block mb-2" data-i18n="testi_kicker"></span>
+      <h2 style="color:var(--deep-sea-dark);" data-i18n="testi_title"></h2>
+    </div>
+    <div class="row g-4" id="testiGrid"></div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="pt-5">
+  <div class="container">
+    <div class="row g-4 pb-4 border-bottom border-secondary-subtle">
+      <div class="col-lg-4">
+        <span class="navbar-brand serif fw-bold text-white">Hawksbay <em>Huts</em></span>
+        <p class="mt-3 small" style="opacity:0.65; max-width:280px;" data-i18n="footer_about"></p>
+      </div>
+      <div class="col-lg-2 col-6">
+        <h6 class="fw-semibold mb-3" data-i18n="footer_links"></h6>
+        <ul class="list-unstyled small d-flex flex-column gap-2">
+          <li><a href="#huts" data-i18n="nav_huts"></a></li>
+          <li><a href="#facilities" data-i18n="nav_facilities"></a></li>
+          <li><a href="#pricing" data-i18n="nav_pricing"></a></li>
+          <li><a href="#booking" data-i18n="nav_booking"></a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-6">
+        <h6 class="fw-semibold mb-3" data-i18n="footer_hours"></h6>
+        <ul class="list-unstyled small d-flex flex-column gap-2">
+          <li data-i18n="footer_hours1"></li>
+          <li data-i18n="footer_hours2"></li>
+          <li data-i18n="footer_hours3"></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-6">
+        <h6 class="fw-semibold mb-3" data-i18n="footer_contact"></h6>
+        <ul class="list-unstyled small d-flex flex-column gap-2">
+          <li>0304-1291775</li>
+          <li>info@hawksbayhuts.pk</li>
+          <li data-i18n="footer_loc"></li>
+        </ul>
+      </div>
+    </div>
+    <div class="dev-strip py-3 d-flex justify-content-between align-items-center flex-wrap gap-3 small" style="opacity:0.8;">
+      <span data-i18n="footer_rights"></span>
+      <div class="d-flex align-items-center gap-2">
+        <div class="dev-avatar">JS</div>
+        <div>
+          <div class="text-white fw-bold">Jiskani Software Solutions</div>
+          <div style="font-size:0.78rem;">Developer: Muhammad Asim Raza — 0304-1291775</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Floating WhatsApp Button -->
+<a href="#" id="waFloat" class="wa-float" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.47 3.47 1.29 4.93L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.13c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.12.11-1.8-.11-.42-.13-.96-.3-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.02-2.41.27-.29.58-.36.78-.36.19 0 .39 0 .56.01.18.01.42-.07.65.5.24.58.82 2.01.89 2.16.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.16-.29.36-.42.49-.14.14-.28.29-.12.57.16.28.7 1.16 1.51 1.87 1.04.93 1.92 1.22 2.19 1.36.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.18-.27.36-.22.6-.13.24.09 1.53.72 1.79.85.27.13.44.19.51.3.07.11.07.62-.17 1.3z"/></svg>
+</a>
+
+<!-- ===================== HUT DETAIL MODAL ===================== -->
+<div class="modal fade" id="hutDetailModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mdTitle"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="mdCarousel" class="carousel slide mb-3" data-bs-ride="false">
+          <div class="carousel-inner rounded-3" id="mdCarouselInner"></div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#mdCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+          <button class="carousel-control-next" type="button" data-bs-target="#mdCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+        </div>
+        <div class="hut-price mb-1" id="mdPrice"></div>
+        <p class="text-secondary" id="mdDesc"></p>
+        <div class="d-flex flex-wrap gap-2 mb-3" id="mdFacils"></div>
+        <button class="btn text-white w-100 mb-4 fw-semibold" style="background:var(--wa);" id="mdBookBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-3px; margin-inline-end:6px;"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.47 3.47 1.29 4.93L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.13c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.12.11-1.8-.11-.42-.13-.96-.3-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.02-2.41.27-.29.58-.36.78-.36.19 0 .39 0 .56.01.18.01.42-.07.65.5.24.58.82 2.01.89 2.16.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.16-.29.36-.42.49-.14.14-.28.29-.12.57.16.28.7 1.16 1.51 1.87 1.04.93 1.92 1.22 2.19 1.36.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.18-.27.36-.22.6-.13.24.09 1.53.72 1.79.85.27.13.44.19.51.3.07.11.07.62-.17 1.3z"/></svg>
+          <span data-i18n="modal_book_btn"></span>
+        </button>
+        <hr>
+        <h6 class="fw-semibold mb-3" data-i18n="comments_title"></h6>
+        <div id="mdComments" class="mb-3"></div>
+        <div id="mdCommentFormWrap">
+          <textarea class="form-control mb-2" id="mdCommentText" rows="2" data-i18n-ph="comment_placeholder"></textarea>
+          <button class="btn btn-sm btn-coral" id="mdCommentSubmit" data-i18n="comment_submit"></button>
+        </div>
+        <div id="mdCommentLoginPrompt" class="d-none">
+          <p class="small text-secondary mb-2" data-i18n="auth_need_login_comment"></p>
+          <button class="btn btn-sm btn-outline-secondary" id="mdLoginPromptBtn" data-i18n="auth_login"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== LOGIN MODAL ===================== -->
+<div class="modal fade" id="loginModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title" data-i18n="auth_login"></h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <div class="mb-3"><label class="form-label fw-semibold" data-i18n="auth_email"></label><input type="email" class="form-control" id="loginEmail"></div>
+        <div class="mb-2"><label class="form-label fw-semibold" data-i18n="auth_password"></label><input type="password" class="form-control" id="loginPassword"></div>
+        <div class="text-danger small mb-2" id="loginErr"></div>
+        <button class="btn btn-coral w-100" id="loginSubmitBtn" data-i18n="auth_login_btn"></button>
+        <p class="text-center small mt-3 mb-0">
+          <span data-i18n="auth_switch_to_register"></span>
+          <a href="#" id="goRegister" class="fw-semibold">→</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== REGISTER MODAL ===================== -->
+<div class="modal fade" id="registerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title" data-i18n="auth_register"></h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <div class="mb-3"><label class="form-label fw-semibold" data-i18n="auth_name"></label><input type="text" class="form-control" id="regName"></div>
+        <div class="mb-3"><label class="form-label fw-semibold" data-i18n="auth_email"></label><input type="email" class="form-control" id="regEmail"></div>
+        <div class="mb-2"><label class="form-label fw-semibold" data-i18n="auth_password"></label><input type="password" class="form-control" id="regPassword"></div>
+        <div class="text-danger small mb-2" id="regErr"></div>
+        <button class="btn btn-coral w-100" id="regSubmitBtn" data-i18n="auth_register_btn"></button>
+        <p class="text-center small mt-3 mb-0">
+          <span data-i18n="auth_switch_to_login"></span>
+          <a href="#" id="goLogin" class="fw-semibold">→</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ADMIN LOGIN MODAL ===================== -->
+<div class="modal fade" id="adminLoginModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title" data-i18n="admin_login_title"></h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <div class="mb-3"><label class="form-label fw-semibold" data-i18n="admin_username"></label><input type="text" class="form-control" id="adminUser"></div>
+        <div class="mb-2"><label class="form-label fw-semibold" data-i18n="admin_password"></label><input type="password" class="form-control" id="adminPass"></div>
+        <div class="text-danger small mb-2" id="adminErr"></div>
+        <p class="small text-secondary" data-i18n="admin_demo_hint"></p>
+        <button class="btn btn-coral w-100" id="adminLoginSubmitBtn" data-i18n="admin_login_btn"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ADD/EDIT HUT MODAL ===================== -->
+<div class="modal fade" id="hutFormModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title" id="hutFormTitle"></h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <form id="hutForm">
+          <div class="row">
+            <div class="col-md-6 mb-3"><label class="form-label fw-semibold" data-i18n="af_name_en"></label><input type="text" class="form-control" id="fNameEn" required></div>
+            <div class="col-md-6 mb-3"><label class="form-label fw-semibold" data-i18n="af_name_ur"></label><input type="text" class="form-control" id="fNameUr" required></div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3"><label class="form-label fw-semibold" data-i18n="af_cat"></label>
+              <select class="form-select" id="fCat">
+                <option value="standard" data-i18n="filter_standard"></option>
+                <option value="deluxe" data-i18n="filter_deluxe"></option>
+                <option value="family" data-i18n="filter_family"></option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3"><label class="form-label fw-semibold" data-i18n="af_price"></label><input type="text" class="form-control" id="fPrice" placeholder="3,500" required></div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3"><label class="form-label fw-semibold" data-i18n="af_cap_en"></label><input type="text" class="form-control" id="fCapEn" placeholder="4 Guests" required></div>
+            <div class="col-md-6 mb-3"><label class="form-label fw-semibold" data-i18n="af_cap_ur"></label><input type="text" class="form-control" id="fCapUr" placeholder="4 افراد" required></div>
+          </div>
+          <div class="mb-3"><label class="form-label fw-semibold" data-i18n="af_desc_en"></label><textarea class="form-control" id="fDescEn" rows="2" required></textarea></div>
+          <div class="mb-3"><label class="form-label fw-semibold" data-i18n="af_desc_ur"></label><textarea class="form-control" id="fDescUr" rows="2" required></textarea></div>
+          <div class="row">
+            <div class="col-md-6 mb-3"><label class="form-label fw-semibold" data-i18n="af_facils_en"></label><input type="text" class="form-control" id="fFacilsEn" placeholder="Fan, Parking, Washroom"></div>
+            <div class="col-md-6 mb-3"><label class="form-label fw-semibold" data-i18n="af_facils_ur"></label><input type="text" class="form-control" id="fFacilsUr" placeholder="پنکھا, پارکنگ, واش روم"></div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3"><label class="form-label fw-semibold" data-i18n="af_status"></label>
+              <select class="form-select" id="fStatus">
+                <option value="available" data-i18n="stamp_available"></option>
+                <option value="busy" data-i18n="stamp_busy"></option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3"><label class="form-label fw-semibold" data-i18n="af_images"></label>
+              <select class="form-select" id="fImageSet">
+                <option value="0">Set 1</option>
+                <option value="1">Set 2</option>
+                <option value="2">Set 3</option>
+              </select>
+            </div>
+          </div>
+          <div class="text-danger small mb-2" id="hutFormErr"></div>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary flex-fill" data-bs-dismiss="modal" data-i18n="cancel_btn"></button>
+            <button type="submit" class="btn btn-coral flex-fill" data-i18n="save_btn"></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+/* =============== IMAGES (real stock photos, free-license) =============== */
+const IMG = {
+  hut1: 'https://images.unsplash.com/photo-1533743914085-403451366d53?w=900&q=80&auto=format&fit=crop',
+  hut2: 'https://images.unsplash.com/photo-1657136369376-d8a447c6b23d?w=900&q=80&auto=format&fit=crop',
+  heroBg: 'https://images.unsplash.com/photo-1645790894803-cb53e0655284?w=1600&q=75&auto=format&fit=crop',
+  bbq: 'https://images.unsplash.com/photo-1767206106459-96b2b8f4cd72?w=900&q=80&auto=format&fit=crop',
+  chairs: 'https://images.unsplash.com/photo-1686900248731-5a492eb9a5e2?w=900&q=80&auto=format&fit=crop',
+  family: 'https://images.unsplash.com/photo-1425243749210-c3e3c231504d?w=900&q=80&auto=format&fit=crop'
+};
+document.querySelector('.hero').style.backgroundImage =
+  "linear-gradient(180deg, rgba(10,53,64,0.78), rgba(10,53,64,0.88)), url('"+IMG.heroBg+"')";
+
+const IMAGE_SETS = [
+  [IMG.hut1, IMG.chairs, IMG.bbq],
+  [IMG.hut2, IMG.family, IMG.bbq],
+  [IMG.hut1, IMG.bbq, IMG.family]
+];
+
+/* =============== WHATSAPP =============== */
+const WA_NUMBER = '923041291775';
+function waLink(msg){ return 'https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg); }
+
+/* =============== TRANSLATIONS =============== */
+const translations = {
+  en: {
+    nav_huts:"Our Huts", nav_facilities:"Facilities", nav_pricing:"Pricing", nav_booking:"Booking", nav_reviews:"Reviews", nav_cta:"Book Now",
+    hero_eyebrow:"Hawksbay Beach, Karachi",
+    hero_h1:"Your own place <i>by the sea</i>",
+    hero_lead:"Beautiful, comfortable beach huts on Hawksbay's peaceful shore — perfect for family outings, friends' gatherings or an overnight stay.",
+    hero_cta_huts:"View Huts", hero_cta_price:"See Pricing",
+    stat_huts:"Huts Available", stat_price:"Per night, starting", stat_security:"Security",
+    ad_label:"Advertisement", ad_contact:"Contact us to advertise here",
+    huts_kicker:"Available Huts", huts_title:"Pick a hut for every budget and family size",
+    huts_sub:"Use the filters below to find a hut that fits your needs. Click a hut to see full photos, facilities and reviews.",
+    filter_all:"All Huts", filter_standard:"Standard", filter_deluxe:"Deluxe", filter_family:"Family", filter_avail_only:"Show available only",
+    facil_kicker:"Facilities", facil_title:"Every hut includes all of this", facil_sub:"Essential facilities for a comfortable, safe stay.",
+    price_kicker:"Pricing Details", price_title:"Clear, transparent pricing", price_sub:"Separate weekday and weekend rates — no hidden fees.",
+    price_th_type:"Hut Type", price_th_cap:"Capacity", price_th_wd:"Mon–Thu", price_th_we:"Fri–Sun",
+    price_r1_type:"Standard Hut", price_r1_cap:"4 Guests", price_r2_type:"Deluxe Hut", price_r2_cap:"6 Guests", price_r3_type:"Family Hut", price_r3_cap:"10+ Guests",
+    price_note:"* Parking and basic facilities included. BBQ and extra services charged separately. Rates may vary on Eid and public holidays.",
+    booking_kicker:"Book Now", booking_title:"Reserve your hut today",
+    booking_sub:"Fill the form or message us directly on WhatsApp — our team replies within minutes.",
+    booking_address:"Hawksbay, Keamari, Karachi", wa_direct_btn:"Chat on WhatsApp",
+    form_name:"Full Name", form_phone:"Phone Number", form_date:"Date", form_type:"Hut Type", form_submit:"Send via WhatsApp",
+    form_success:"Opening WhatsApp with your booking details...",
+    testi_kicker:"Guest Reviews", testi_title:"What people say about us",
+    footer_about:"The best beach huts on Karachi's Hawksbay coast, perfect for family and friends' outings.",
+    footer_links:"Quick Links", footer_hours:"Timings", footer_hours1:"Daily 7 AM — 11 PM", footer_hours2:"24 hours during Eid days", footer_hours3:"Advance booking recommended",
+    footer_contact:"Contact", footer_loc:"Hawksbay, Karachi", footer_rights:"© 2026 Hawksbay Beach Huts. All rights reserved.",
+    modal_book_btn:"Book This Hut on WhatsApp",
+    admin_login_btn:"Admin", admin_login_title:"Administrator Login", admin_username:"Username", admin_password:"Password",
+    admin_demo_hint:"Demo access — username: admin, password: admin123",
+    cancel_btn:"Cancel", save_btn:"Save Hut", admin_add_hut:"Add New Hut",
+    af_name_en:"Hut Name (English)", af_name_ur:"Hut Name (Urdu)", af_cat:"Category", af_price:"Price per night (Rs)",
+    af_cap_en:"Capacity (English)", af_cap_ur:"Capacity (Urdu)", af_desc_en:"Description (English)", af_desc_ur:"Description (Urdu)",
+    af_facils_en:"Facilities (comma separated, English)", af_facils_ur:"Facilities (comma separated, Urdu)",
+    af_status:"Rental Status", af_images:"Photo Set",
+    stamp_available:"Available", stamp_busy:"Busy",
+    admin_edit:"Edit", admin_delete:"Delete", admin_mark_available:"Mark Available", admin_mark_busy:"Mark Busy",
+    confirm_delete:"Are you sure you want to delete this hut?", per_night:" / night", admin_logout:"Logout",
+    auth_login:"Login", auth_register:"Create Account", auth_name:"Full Name", auth_email:"Email", auth_password:"Password",
+    auth_login_btn:"Login", auth_register_btn:"Create Account",
+    auth_switch_to_register:"New here?", auth_switch_to_login:"Already have an account?",
+    auth_need_login_comment:"Please login to leave a comment.",
+    comments_title:"Guest Comments", comment_placeholder:"Write your comment...", comment_submit:"Post Comment",
+    no_comments:"No comments yet — be the first to share your experience.",
+    auth_err_fill:"Please fill all fields", auth_err_exists:"An account with this email already exists",
+    auth_err_invalid:"Incorrect email or password", auth_welcome:"Hi, {name}"
+  },
+  ur: {
+    nav_huts:"ہمارے حط", nav_facilities:"سہولیات", nav_pricing:"قیمتیں", nav_booking:"بکنگ", nav_reviews:"آراء", nav_cta:"ابھی بک کریں",
+    hero_eyebrow:"Hawksbay Beach، کراچی",
+    hero_h1:"سمندر کنارے آپ کا <i>اپنا</i> ٹھکانہ",
+    hero_lead:"ہاکس بے کے پرسکون ساحل پر خوبصورت اور آرام دہ بیچ حٹس — فیملی آؤٹنگ، دوستوں کی گیدرنگ یا رات بھر کے قیام کے لیے بہترین انتخاب۔",
+    hero_cta_huts:"حٹس دیکھیں", hero_cta_price:"قیمتیں دیکھیں",
+    stat_huts:"دستیاب حٹس", stat_price:"فی رات، شروع", stat_security:"سیکیورٹی",
+    ad_label:"اشتہار", ad_contact:"اشتہار دینے کے لیے ہم سے رابطہ کریں",
+    huts_kicker:"دستیاب حٹس", huts_title:"ہر بجٹ اور فیملی سائز کے لیے حٹ منتخب کریں",
+    huts_sub:"نیچے فلٹر استعمال کر کے اپنی ضرورت کے مطابق حٹ تلاش کریں۔ مکمل تصاویر، سہولیات اور آراء دیکھنے کے لیے حٹ پر کلک کریں۔",
+    filter_all:"تمام حٹس", filter_standard:"اسٹینڈرڈ", filter_deluxe:"ڈیلکس", filter_family:"فیملی", filter_avail_only:"صرف دستیاب حٹس دکھائیں",
+    facil_kicker:"سہولیات", facil_title:"ہر حٹ کے ساتھ یہ سب شامل ہے", facil_sub:"آپ کے آرام دہ اور محفوظ قیام کے لیے تمام بنیادی سہولیات دستیاب ہیں۔",
+    price_kicker:"قیمتوں کی تفصیل", price_title:"واضح اور شفاف قیمتیں", price_sub:"ہفتے کے دن اور ویک اینڈ کے لیے الگ الگ ریٹ — کوئی چھپی ہوئی فیس نہیں۔",
+    price_th_type:"حٹ کی قسم", price_th_cap:"گنجائش", price_th_wd:"پیر–جمعرات", price_th_we:"جمعہ–اتوار",
+    price_r1_type:"اسٹینڈرڈ حٹ", price_r1_cap:"4 افراد", price_r2_type:"ڈیلکس حٹ", price_r2_cap:"6 افراد", price_r3_type:"فیملی حٹ", price_r3_cap:"10+ افراد",
+    price_note:"* قیمتوں میں پارکنگ اور بنیادی سہولیات شامل ہیں۔ بی بی کیو اور اضافی سروسز الگ سے چارج ہوں گی۔ عید اور خاص تعطیلات پر ریٹ مختلف ہو سکتے ہیں۔",
+    booking_kicker:"بکنگ کریں", booking_title:"اپنی حٹ ابھی محفوظ کریں",
+    booking_sub:"فارم بھریں یا براہ راست واٹس ایپ پر پیغام بھیجیں — ہماری ٹیم چند منٹوں میں جواب دے گی۔",
+    booking_address:"ہاکس بے، کیماڑی، کراچی", wa_direct_btn:"واٹس ایپ پر بات کریں",
+    form_name:"پورا نام", form_phone:"فون نمبر", form_date:"تاریخ", form_type:"حٹ کی قسم", form_submit:"واٹس ایپ کے ذریعے بھیجیں",
+    form_success:"آپ کی بکنگ تفصیلات کے ساتھ واٹس ایپ کھل رہا ہے...",
+    testi_kicker:"مہمانوں کی آراء", testi_title:"لوگ ہمارے بارے میں کیا کہتے ہیں",
+    footer_about:"کراچی کے ہاکس بے ساحل پر بہترین بیچ حٹس، فیملی اور دوستوں کی آؤٹنگ کے لیے۔",
+    footer_links:"روابط", footer_hours:"اوقات", footer_hours1:"روزانہ صبح 7 — رات 11", footer_hours2:"عید کے دنوں میں 24 گھنٹے", footer_hours3:"ایڈوانس بکنگ تجویز کردہ",
+    footer_contact:"رابطہ", footer_loc:"ہاکس بے، کراچی", footer_rights:"© 2026 Hawksbay Beach Huts. تمام حقوق محفوظ ہیں۔",
+    modal_book_btn:"واٹس ایپ پر اس حٹ کی بکنگ کریں",
+    admin_login_btn:"ایڈمن", admin_login_title:"ایڈمنسٹریٹر لاگ ان", admin_username:"یوزر نیم", admin_password:"پاس ورڈ",
+    admin_demo_hint:"ڈیمو رسائی — یوزر نیم: admin، پاس ورڈ: admin123",
+    cancel_btn:"منسوخ کریں", save_btn:"حٹ محفوظ کریں", admin_add_hut:"نئی حٹ شامل کریں",
+    af_name_en:"حٹ کا نام (انگریزی)", af_name_ur:"حٹ کا نام (اردو)", af_cat:"کیٹیگری", af_price:"قیمت فی رات (روپے)",
+    af_cap_en:"گنجائش (انگریزی)", af_cap_ur:"گنجائش (اردو)", af_desc_en:"تفصیل (انگریزی)", af_desc_ur:"تفصیل (اردو)",
+    af_facils_en:"سہولیات (کاما سے الگ، انگریزی)", af_facils_ur:"سہولیات (کاما سے الگ، اردو)",
+    af_status:"کرائے کی صورتحال", af_images:"تصاویر سیٹ",
+    stamp_available:"دستیاب", stamp_busy:"مصروف",
+    admin_edit:"ترمیم", admin_delete:"حذف کریں", admin_mark_available:"دستیاب کریں", admin_mark_busy:"مصروف کریں",
+    confirm_delete:"کیا آپ واقعی اس حٹ کو حذف کرنا چاہتے ہیں؟", per_night:" / رات", admin_logout:"لاگ آؤٹ",
+    auth_login:"لاگ ان", auth_register:"اکاؤنٹ بنائیں", auth_name:"پورا نام", auth_email:"ای میل", auth_password:"پاس ورڈ",
+    auth_login_btn:"لاگ ان کریں", auth_register_btn:"اکاؤنٹ بنائیں",
+    auth_switch_to_register:"نیا صارف ہیں؟", auth_switch_to_login:"پہلے سے اکاؤنٹ ہے؟",
+    auth_need_login_comment:"کمنٹ کرنے کے لیے براہ کرم لاگ ان کریں۔",
+    comments_title:"مہمانوں کے تبصرے", comment_placeholder:"اپنا تبصرہ لکھیں...", comment_submit:"تبصرہ پوسٹ کریں",
+    no_comments:"ابھی تک کوئی تبصرہ نہیں — اپنا تجربہ شیئر کرنے والے پہلے فرد بنیں۔",
+    auth_err_fill:"براہ کرم تمام خانے پُر کریں", auth_err_exists:"اس ای میل کے ساتھ پہلے سے اکاؤنٹ موجود ہے",
+    auth_err_invalid:"غلط ای میل یا پاس ورڈ", auth_welcome:"ہیلو، {name}"
+  }
+};
+let currentLang = localStorage.getItem('hb_lang') || 'ur';
+function t(key){ return (translations[currentLang] && translations[currentLang][key]) || key; }
+
+/* =============== DATA: HUTS =============== */
+const defaultHuts = [
+  {id:1, cat:"standard", price:"3,500", status:"available", imgSet:0,
+    name:{en:"Sunset Standard Hut", ur:"سن سیٹ اسٹینڈرڈ حٹ"}, cap:{en:"4 Guests", ur:"4 افراد"},
+    desc:{en:"A comfortable standard hut close to the sea, ideal for a small family or couples, with basic facilities.", ur:"سمندر کے قریب ایک آرام دہ اسٹینڈرڈ حٹ، چھوٹی فیملی یا جوڑوں کے لیے موزوں۔ بنیادی سہولیات کے ساتھ۔"},
+    facils:{en:["Fan","Charpai Beds","Parking","Washroom"], ur:["پنکھا","چارپائیاں","پارکنگ","واش روم"]}},
+  {id:2, cat:"standard", price:"3,800", status:"available", imgSet:1,
+    name:{en:"Breeze Standard Hut", ur:"بریز اسٹینڈرڈ حٹ"}, cap:{en:"4 Guests", ur:"4 افراد"},
+    desc:{en:"Open air and sea-view simple yet clean hut, great for a short stay.", ur:"کھلی ہوا اور سمندری منظر کے ساتھ سادہ مگر صاف ستھری حٹ، مختصر قیام کے لیے بہترین۔"},
+    facils:{en:["Fan","Seating Area","Parking","Lighting"], ur:["پنکھا","بیٹھنے کی جگہ","پارکنگ","لائٹنگ"]}},
+  {id:3, cat:"deluxe", price:"5,500", status:"available", imgSet:2,
+    name:{en:"Royal Deluxe Hut", ur:"رائل ڈیلکس حٹ"}, cap:{en:"6 Guests", ur:"6 افراد"},
+    desc:{en:"Deluxe hut with an extra room and better furniture, ideal for a friends' gathering or BBQ night.", ur:"اضافی کمرہ اور بہتر فرنیچر کے ساتھ ڈیلکس حٹ، دوستوں کی گیدرنگ یا بی بی کیو نائٹ کے لیے آئیڈیل۔"},
+    facils:{en:["AC Option","BBQ Area","Parking","Security","Washroom"], ur:["اے سی آپشن","بی بی کیو ایریا","پارکنگ","سیکیورٹی","واش روم"]}},
+  {id:4, cat:"deluxe", price:"6,200", status:"busy", imgSet:0,
+    name:{en:"Pearl Deluxe Hut", ur:"پرل ڈیلکس حٹ"}, cap:{en:"6 Guests", ur:"6 افراد"},
+    desc:{en:"Right in front of the sea, with a large balcony and better seating arrangement.", ur:"سمندر کے بالکل سامنے واقع، بڑی بالکونی اور بہتر بیٹھنے کے انتظام کے ساتھ۔"},
+    facils:{en:["Balcony","BBQ Area","Music System","Parking"], ur:["بالکونی","بی بی کیو ایریا","میوزک سسٹم","پارکنگ"]}},
+  {id:5, cat:"family", price:"8,000", status:"available", imgSet:1,
+    name:{en:"Grand Family Hut", ur:"گرینڈ فیملی حٹ"}, cap:{en:"10+ Guests", ur:"10+ افراد"},
+    desc:{en:"A spacious hut for large families or groups, with multiple rooms and full facilities.", ur:"بڑی فیملیز یا گروپس کے لیے وسیع حٹ، متعدد کمرے اور مکمل سہولیات کے ساتھ۔"},
+    facils:{en:["2 Washrooms","BBQ Area","Generator Backup","Security","Parking"], ur:["2 واش روم","بی بی کیو ایریا","جنریٹر بیک اپ","سیکیورٹی","پارکنگ"]}},
+  {id:6, cat:"family", price:"9,500", status:"busy", imgSet:2,
+    name:{en:"Harbor Family Hut", ur:"ہاربر فیملی حٹ"}, cap:{en:"12+ Guests", ur:"12+ افراد"},
+    desc:{en:"Great for wedding events or large gatherings, with a wide open courtyard and seating.", ur:"شادی کی تقریبات یا بڑی گیدرنگ کے لیے موزوں، وسیع کھلا صحن اور بیٹھنے کی جگہ۔"},
+    facils:{en:["Open Courtyard","BBQ Area","Music System","2 Washrooms","Parking"], ur:["کھلا صحن","بی بی کیو ایریا","میوزک سسٹم","2 واش روم","پارکنگ"]}},
+];
+function loadHuts(){
+  try{ const raw = localStorage.getItem('hb_huts_v2'); if(raw) return JSON.parse(raw); }catch(e){}
+  saveHuts(defaultHuts); return JSON.parse(JSON.stringify(defaultHuts));
+}
+function saveHuts(list){ localStorage.setItem('hb_huts_v2', JSON.stringify(list)); }
+let huts = loadHuts();
+let currentFilter = 'all';
+
+/* =============== DATA: USERS / AUTH =============== */
+function loadUsers(){ try{ return JSON.parse(localStorage.getItem('hb_users')||'[]'); }catch(e){ return []; } }
+function saveUsers(list){ localStorage.setItem('hb_users', JSON.stringify(list)); }
+let currentUser = JSON.parse(sessionStorage.getItem('hb_current_user') || 'null');
+
+/* =============== DATA: COMMENTS =============== */
+function loadComments(){ try{ return JSON.parse(localStorage.getItem('hb_comments_v1')||'{}'); }catch(e){ return {}; } }
+function saveComments(obj){ localStorage.setItem('hb_comments_v1', JSON.stringify(obj)); }
+let comments = loadComments();
+
+/* =============== ADMIN =============== */
+const ADMIN_USER = 'admin', ADMIN_PASS = 'admin123';
+let isAdmin = sessionStorage.getItem('hb_admin') === '1';
+
+/* =============== LANG APPLY =============== */
+function applyLang(lang){
+  currentLang = lang;
+  localStorage.setItem('hb_lang', lang);
+  document.documentElement.lang = lang;
+  document.body.dir = lang === 'ur' ? 'rtl' : 'ltr';
+  document.getElementById('langToggle').textContent = lang === 'ur' ? 'English' : 'اردو';
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const val = t(el.getAttribute('data-i18n'));
+    if(el.hasAttribute('data-i18n-html')) el.innerHTML = val; else el.textContent = val;
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.placeholder = t(el.getAttribute('data-i18n-ph')); });
+  updateAdminUI(); updateAuthUI();
+  renderHuts(); renderFacilities(); renderTestimonials(); populateBookingTypes();
+}
+
+/* =============== HUT RENDER (Bootstrap cards) =============== */
+function catLabel(cat){ return cat==='standard'?t('filter_standard'):cat==='deluxe'?t('filter_deluxe'):t('filter_family'); }
+
+function renderHuts(){
+  const grid = document.getElementById('hutGrid');
+  grid.innerHTML = "";
+  const availOnly = document.getElementById('availOnly').checked;
+  let list = currentFilter === 'all' ? huts : huts.filter(h=>h.cat===currentFilter);
+  if(availOnly) list = list.filter(h=>h.status==='available');
+  document.getElementById('statHuts').textContent = huts.filter(h=>h.status==='available').length + '+';
+  list.forEach(h=>{
+    const imgs = IMAGE_SETS[h.imgSet] || IMAGE_SETS[0];
+    const facils = h.facils[currentLang] || h.facils.en;
+    const col = document.createElement('div');
+    col.className = 'col-md-6 col-lg-4';
+    col.innerHTML = `
+      <div class="card hut-card position-relative">
+        <span class="badge bg-coral hut-tag" style="background:var(--coral);">${catLabel(h.cat)}</span>
+        <span class="stamp ${h.status}">${h.status==='available'?t('stamp_available'):t('stamp_busy')}</span>
+        <img src="${imgs[0]}" class="card-img-top" alt="${h.name[currentLang]||h.name.en}" data-hutimg="${h.id}" style="cursor:pointer;">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title" data-hutimg="${h.id}" style="cursor:pointer;">${h.name[currentLang]||h.name.en}</h5>
+          <div class="d-flex flex-wrap gap-1 mb-2">${facils.slice(0,3).map(f=>'<span class="badge text-bg-light border">'+f+'</span>').join('')}</div>
+          <div class="d-flex justify-content-between align-items-baseline mt-auto pt-2 border-top">
+            <div class="hut-price">Rs ${h.price}<span class="fs-6 fw-normal text-secondary">${t('per_night')}</span></div>
+            <div class="small text-secondary">${h.cap[currentLang]||h.cap.en}</div>
+          </div>
+          <button class="btn btn-deepsea btn-sm mt-2 text-white" style="background:var(--deep-sea);" data-hutimg="${h.id}">${currentLang==='ur'?'تفصیل دیکھیں':'View Details'}</button>
+          <div class="admin-row mt-2">
+            <button class="btn btn-sm btn-outline-secondary flex-fill admin-edit" data-id="${h.id}">${t('admin_edit')}</button>
+            <button class="btn btn-sm btn-outline-success flex-fill admin-status" data-id="${h.id}">${h.status==='available'?t('admin_mark_busy'):t('admin_mark_available')}</button>
+            <button class="btn btn-sm btn-outline-danger flex-fill admin-delete" data-id="${h.id}">${t('admin_delete')}</button>
+          </div>
+        </div>
+      </div>`;
+    grid.appendChild(col);
+  });
+  grid.querySelectorAll('[data-hutimg]').forEach(el=>el.addEventListener('click', ()=>openHutDetail(parseInt(el.dataset.hutimg))));
+  grid.querySelectorAll('.admin-edit').forEach(b=>b.addEventListener('click', ()=>openHutForm(parseInt(b.dataset.id))));
+  grid.querySelectorAll('.admin-delete').forEach(b=>b.addEventListener('click', ()=>deleteHut(parseInt(b.dataset.id))));
+  grid.querySelectorAll('.admin-status').forEach(b=>b.addEventListener('click', ()=>toggleStatus(parseInt(b.dataset.id))));
+}
+document.getElementById('filterBar').addEventListener('click',(e)=>{
+  const btn = e.target.closest('.filter-btn'); if(!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); currentFilter = btn.dataset.filter; renderHuts();
+});
+document.getElementById('availOnly').addEventListener('change', renderHuts);
+
+function toggleStatus(id){ const h=huts.find(x=>x.id===id); if(!h) return; h.status = h.status==='available'?'busy':'available'; saveHuts(huts); renderHuts(); }
+function deleteHut(id){ if(!confirm(t('confirm_delete'))) return; huts = huts.filter(x=>x.id!==id); saveHuts(huts); renderHuts(); }
+
+/* =============== FACILITIES =============== */
+const facilitiesData = [
+  {icon:'<path d="M4 21v-7a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v7"/><path d="M4 14h16"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/>', en:["BBQ Area","Dedicated space and equipment for outdoor cooking."], ur:["بی بی کیو ایریا","باہر کھانا پکانے کے لیے مخصوص جگہ اور سامان دستیاب۔"]},
+  {icon:'<rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 5v3h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>', en:["Free Parking","Safe, open parking available for all guests."], ur:["فری پارکنگ","تمام مہمانوں کے لیے محفوظ اور کھلی پارکنگ کی سہولت۔"]},
+  {icon:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>', en:["24/7 Security","Round the clock guards and monitoring."], ur:["24/7 سیکیورٹی","چوبیس گھنٹے گارڈز اور نگرانی کا مکمل انتظام۔"]},
+  {icon:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>', en:["Generator Backup","Uninterrupted power supply during load-shedding."], ur:["جنریٹر بیک اپ","لوڈ شیڈنگ کی صورت میں بجلی کی بلا تعطل فراہمی۔"]},
+  {icon:'<path d="M3 12h18M3 6h18M3 18h18"/>', en:["Clean Washrooms","Regularly cleaned, separate washroom facilities."], ur:["صاف واش رومز","باقاعدگی سے صفائی کے ساتھ الگ واش روم کی سہولت۔"]},
+  {icon:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>', en:["Music System","Sound system available for events and gatherings."], ur:["میوزک سسٹم","تقریبات اور گیدرنگز کے لیے ساؤنڈ سسٹم دستیاب۔"]},
+  {icon:'<path d="M18 20V10M12 20V4M6 20v-6"/>', en:["Open Seating Courtyard","Wide open space to sit with friends and family."], ur:["کھلا بیٹھنے کا صحن","دوستوں و فیملی کے ساتھ بیٹھنے کے لیے وسیع کھلی جگہ۔"]},
+  {icon:'<path d="M2 12h20M12 2v20"/><circle cx="12" cy="12" r="9"/>', en:["Direct Beach Access","The sea is just a few steps from every hut."], ur:["ساحل تک براہ راست رسائی","ہر حٹ سے صرف چند قدموں کے فاصلے پر سمندر۔"]},
+];
+function renderFacilities(){
+  const grid = document.getElementById('facilGrid'); grid.innerHTML = "";
+  facilitiesData.forEach(f=>{
+    const d = f[currentLang]||f.en;
+    const col = document.createElement('div'); col.className = 'col-6 col-md-3';
+    col.innerHTML = `<div class="facil-item text-center text-md-start"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${f.icon}</svg><h6 class="fw-semibold">${d[0]}</h6><p class="small mb-0" style="opacity:0.7;">${d[1]}</p></div>`;
+    grid.appendChild(col);
+  });
+}
+
+/* =============== TESTIMONIALS =============== */
+const testimonialsData = [
+  {avatar:"U", en:["\"Best experience for a family overnight stay, the hut was clean and security was good too.\"","Umar Farooq","Gulshan, Karachi"], ur:["\"فیملی کے ساتھ رات گزارنے کا بہترین تجربہ رہا، حٹ صاف ستھری اور سیکیورٹی بھی اچھی تھی۔\"","عمر فاروق","گلشن، کراچی"]},
+  {avatar:"F", en:["\"Great spot for a BBQ night with friends, the staff was very cooperative too.\"","Fatima Khan","Defence, Karachi"], ur:["\"دوستوں کے ساتھ بی بی کیو نائٹ کے لیے بہترین جگہ، عملہ بھی بہت تعاون کرنے والا تھا۔\"","فاطمہ خان","ڈیفنس، کراچی"]},
+  {avatar:"B", en:["\"Fair pricing and full facilities, planning to come again. Booking was easy too.\"","Bilal Ahmed","North Nazimabad"], ur:["\"قیمت مناسب اور سہولیات پوری، دوبارہ آنے کا ارادہ ہے۔ بکنگ کا طریقہ بھی آسان تھا۔\"","بلال احمد","نارتھ ناظم آباد"]},
+];
+function renderTestimonials(){
+  const grid = document.getElementById('testiGrid'); grid.innerHTML = "";
+  testimonialsData.forEach(x=>{
+    const d = x[currentLang]||x.en;
+    const col = document.createElement('div'); col.className = 'col-md-4';
+    col.innerHTML = `<div class="card testi-card p-4 h-100"><p class="fst-italic serif mb-3">${d[0]}</p><div class="d-flex align-items-center gap-2"><div class="testi-avatar">${x.avatar}</div><div><div class="fw-bold small">${d[1]}</div><div class="small text-secondary">${d[2]}</div></div></div></div>`;
+    grid.appendChild(col);
+  });
+}
+function populateBookingTypes(){
+  const sel = document.getElementById('bType');
+  sel.innerHTML = '<option>'+t('price_r1_type')+'</option><option>'+t('price_r2_type')+'</option><option>'+t('price_r3_type')+'</option>';
+}
+
+/* =============== HUT DETAIL MODAL =============== */
+let currentHutId = null;
+const hutDetailModal = new bootstrap.Modal(document.getElementById('hutDetailModal'));
+function openHutDetail(id){
+  const h = huts.find(x=>x.id===id); if(!h) return;
+  currentHutId = id;
+  document.getElementById('mdTitle').textContent = h.name[currentLang]||h.name.en;
+  document.getElementById('mdPrice').textContent = 'Rs '+h.price+t('per_night')+'  •  '+(h.cap[currentLang]||h.cap.en);
+  document.getElementById('mdDesc').textContent = h.desc[currentLang]||h.desc.en;
+  const facils = h.facils[currentLang]||h.facils.en;
+  document.getElementById('mdFacils').innerHTML = facils.map(f=>'<span class="badge text-bg-light border">'+f+'</span>').join('');
+  const imgs = IMAGE_SETS[h.imgSet] || IMAGE_SETS[0];
+  document.getElementById('mdCarouselInner').innerHTML = imgs.map((src,i)=>
+    `<div class="carousel-item ${i===0?'active':''}"><img src="${src}" class="d-block w-100" style="height:340px;object-fit:cover;"></div>`).join('');
+  document.getElementById('mdBookBtn').onclick = ()=>{
+    const msg = (currentLang==='ur' ? 'السلام علیکم، مجھے یہ حٹ بک کروانی ہے: ' : 'Hello, I would like to book this hut: ') + (h.name[currentLang]||h.name.en) + ' (Rs '+h.price+t('per_night')+')';
+    window.open(waLink(msg), '_blank');
+  };
+  renderComments(id);
+  hutDetailModal.show();
+}
+function renderComments(hutId){
+  const list = comments[hutId] || [];
+  const wrap = document.getElementById('mdComments');
+  wrap.innerHTML = list.length ? list.map(c=>`
+    <div class="comment-item">
+      <div class="d-flex justify-content-between">
+        <span class="comment-name">${c.name}</span>
+        <span class="comment-date">${c.date}</span>
+      </div>
+      <p class="mb-0 small">${c.text}</p>
+      ${isAdmin ? '<button class="btn btn-sm btn-link text-danger p-0 admin-del-comment" data-idx="'+list.indexOf(c)+'">'+t('admin_delete')+'</button>' : ''}
+    </div>`).join('') : `<p class="text-secondary small">${t('no_comments')}</p>`;
+  wrap.querySelectorAll('.admin-del-comment').forEach(b=>b.addEventListener('click', ()=>{
+    list.splice(parseInt(b.dataset.idx),1);
+    comments[hutId] = list; saveComments(comments); renderComments(hutId);
+  }));
+  const formWrap = document.getElementById('mdCommentFormWrap');
+  const loginPrompt = document.getElementById('mdCommentLoginPrompt');
+  if(currentUser){ formWrap.classList.remove('d-none'); loginPrompt.classList.add('d-none'); }
+  else { formWrap.classList.add('d-none'); loginPrompt.classList.remove('d-none'); }
+}
+document.getElementById('mdCommentSubmit').addEventListener('click', ()=>{
+  const text = document.getElementById('mdCommentText').value.trim();
+  if(!text || !currentUser || currentHutId===null) return;
+  if(!comments[currentHutId]) comments[currentHutId] = [];
+  comments[currentHutId].push({name:currentUser.name, text:text, date:new Date().toLocaleDateString()});
+  saveComments(comments);
+  document.getElementById('mdCommentText').value = '';
+  renderComments(currentHutId);
+});
+document.getElementById('mdLoginPromptBtn').addEventListener('click', ()=>{
+  hutDetailModal.hide();
+  new bootstrap.Modal(document.getElementById('loginModal')).show();
+});
+
+/* =============== AUTH =============== */
+const loginModalEl = document.getElementById('loginModal');
+const registerModalEl = document.getElementById('registerModal');
+const loginModal = new bootstrap.Modal(loginModalEl);
+const registerModal = new bootstrap.Modal(registerModalEl);
+
+function updateAuthUI(){
+  const btn = document.getElementById('authBtn');
+  const greet = document.getElementById('userGreetWrap');
+  if(currentUser){
+    btn.textContent = t('admin_logout');
+    greet.textContent = t('auth_welcome').replace('{name}', currentUser.name);
+    greet.classList.remove('d-none');
+  } else {
+    btn.textContent = t('auth_login');
+    greet.classList.add('d-none');
+  }
+}
+document.getElementById('authBtn').addEventListener('click', ()=>{
+  if(currentUser){ currentUser = null; sessionStorage.removeItem('hb_current_user'); updateAuthUI(); if(currentHutId!==null) renderComments(currentHutId); }
+  else { loginModal.show(); }
+});
+document.getElementById('goRegister').addEventListener('click', (e)=>{ e.preventDefault(); loginModal.hide(); registerModal.show(); });
+document.getElementById('goLogin').addEventListener('click', (e)=>{ e.preventDefault(); registerModal.hide(); loginModal.show(); });
+
+document.getElementById('regSubmitBtn').addEventListener('click', ()=>{
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim().toLowerCase();
+  const pass = document.getElementById('regPassword').value;
+  const err = document.getElementById('regErr');
+  if(!name || !email || !pass){ err.textContent = t('auth_err_fill'); return; }
+  const users = loadUsers();
+  if(users.find(u=>u.email===email)){ err.textContent = t('auth_err_exists'); return; }
+  users.push({name:name, email:email, pass:pass});
+  saveUsers(users);
+  currentUser = {name:name, email:email};
+  sessionStorage.setItem('hb_current_user', JSON.stringify(currentUser));
+  err.textContent = ''; registerModal.hide(); updateAuthUI();
+  if(currentHutId!==null) renderComments(currentHutId);
+});
+document.getElementById('loginSubmitBtn').addEventListener('click', ()=>{
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  const pass = document.getElementById('loginPassword').value;
+  const err = document.getElementById('loginErr');
+  const users = loadUsers();
+  const found = users.find(u=>u.email===email && u.pass===pass);
+  if(!found){ err.textContent = t('auth_err_invalid'); return; }
+  currentUser = {name:found.name, email:found.email};
+  sessionStorage.setItem('hb_current_user', JSON.stringify(currentUser));
+  err.textContent = ''; loginModal.hide(); updateAuthUI();
+  if(currentHutId!==null) renderComments(currentHutId);
+});
+
+/* =============== ADMIN LOGIN =============== */
+const adminLoginModal = new bootstrap.Modal(document.getElementById('adminLoginModal'));
+function updateAdminUI(){
+  const btn = document.getElementById('adminToggle');
+  btn.textContent = isAdmin ? t('admin_logout') : t('admin_login_btn');
+  btn.classList.toggle('is-admin', isAdmin);
+  document.body.classList.toggle('admin-on', isAdmin);
+}
+document.getElementById('adminToggle').addEventListener('click', ()=>{
+  if(isAdmin){ isAdmin = false; sessionStorage.removeItem('hb_admin'); updateAdminUI(); renderHuts(); if(currentHutId!==null) renderComments(currentHutId); }
+  else { document.getElementById('adminErr').textContent=''; adminLoginModal.show(); }
+});
+document.getElementById('adminLoginSubmitBtn').addEventListener('click', ()=>{
+  const u = document.getElementById('adminUser').value.trim();
+  const p = document.getElementById('adminPass').value;
+  const err = document.getElementById('adminErr');
+  if(u===ADMIN_USER && p===ADMIN_PASS){
+    isAdmin = true; sessionStorage.setItem('hb_admin','1');
+    updateAdminUI(); adminLoginModal.hide(); renderHuts();
+    if(currentHutId!==null) renderComments(currentHutId);
+  } else { err.textContent = currentLang==='ur' ? 'غلط یوزر نیم یا پاس ورڈ' : 'Incorrect username or password'; }
+});
+
+/* =============== ADD/EDIT HUT =============== */
+const hutFormModal = new bootstrap.Modal(document.getElementById('hutFormModal'));
+const hutForm = document.getElementById('hutForm');
+let editingId = null;
+document.getElementById('addHutBtn').addEventListener('click', ()=>openHutForm(null));
+function openHutForm(id){
+  editingId = id;
+  document.getElementById('hutFormErr').textContent = '';
+  document.getElementById('hutFormTitle').textContent = t(id ? 'admin_edit' : 'admin_add_hut');
+  if(id){
+    const h = huts.find(x=>x.id===id);
+    document.getElementById('fNameEn').value = h.name.en;
+    document.getElementById('fNameUr').value = h.name.ur;
+    document.getElementById('fCat').value = h.cat;
+    document.getElementById('fPrice').value = h.price;
+    document.getElementById('fCapEn').value = h.cap.en;
+    document.getElementById('fCapUr').value = h.cap.ur;
+    document.getElementById('fDescEn').value = h.desc.en;
+    document.getElementById('fDescUr').value = h.desc.ur;
+    document.getElementById('fFacilsEn').value = h.facils.en.join(', ');
+    document.getElementById('fFacilsUr').value = h.facils.ur.join(', ');
+    document.getElementById('fStatus').value = h.status;
+    document.getElementById('fImageSet').value = h.imgSet || 0;
+  } else { hutForm.reset(); }
+  hutFormModal.show();
+}
+hutForm.addEventListener('submit', function(e){
+  e.preventDefault();
+  const nameEn = document.getElementById('fNameEn').value.trim();
+  const nameUr = document.getElementById('fNameUr').value.trim();
+  const price = document.getElementById('fPrice').value.trim();
+  if(!nameEn || !nameUr || !price){ document.getElementById('hutFormErr').textContent = currentLang==='ur' ? 'براہ کرم تمام لازمی خانے پُر کریں' : 'Please fill all required fields'; return; }
+  const data = {
+    cat: document.getElementById('fCat').value, price: price, status: document.getElementById('fStatus').value,
+    imgSet: parseInt(document.getElementById('fImageSet').value),
+    name:{en:nameEn, ur:nameUr},
+    cap:{en:document.getElementById('fCapEn').value.trim(), ur:document.getElementById('fCapUr').value.trim()},
+    desc:{en:document.getElementById('fDescEn').value.trim(), ur:document.getElementById('fDescUr').value.trim()},
+    facils:{en:document.getElementById('fFacilsEn').value.split(',').map(s=>s.trim()).filter(Boolean), ur:document.getElementById('fFacilsUr').value.split(',').map(s=>s.trim()).filter(Boolean)}
+  };
+  if(editingId){ const idx = huts.findIndex(x=>x.id===editingId); huts[idx] = Object.assign({id:editingId}, data); }
+  else { const newId = huts.length ? Math.max(...huts.map(h=>h.id))+1 : 1; huts.push(Object.assign({id:newId}, data)); }
+  saveHuts(huts); hutFormModal.hide(); renderHuts();
+});
+
+/* =============== LANGUAGE TOGGLE =============== */
+document.getElementById('langToggle').addEventListener('click', ()=>applyLang(currentLang==='ur'?'en':'ur'));
+
+/* =============== BOOKING FORM -> WHATSAPP =============== */
+document.getElementById('bookingForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('bName').value;
+  const phone = document.getElementById('bPhone').value;
+  const date = document.getElementById('bDate').value;
+  const type = document.getElementById('bType').value;
+  const msg = (currentLang==='ur'
+    ? `السلام علیکم، میں ایک حٹ بک کروانا چاہتا/چاہتی ہوں۔\nنام: ${name}\nفون: ${phone}\nتاریخ: ${date}\nحٹ کی قسم: ${type}`
+    : `Hello, I would like to book a hut.\nName: ${name}\nPhone: ${phone}\nDate: ${date}\nHut Type: ${type}`);
+  window.open(waLink(msg), '_blank');
+  document.getElementById('formMsg').classList.remove('d-none');
+  this.reset();
+  setTimeout(()=>document.getElementById('formMsg').classList.add('d-none'), 5000);
+});
+document.getElementById('waDirectBtn').addEventListener('click', ()=>{
+  window.open(waLink(currentLang==='ur' ? 'السلام علیکم، مجھے حٹ کی بکنگ کے بارے میں معلومات چاہییں۔' : 'Hello, I would like information about hut bookings.'), '_blank');
+});
+document.getElementById('navBookBtn').addEventListener('click', ()=>document.getElementById('booking').scrollIntoView({behavior:'smooth'}));
+document.getElementById('waFloat').addEventListener('click', function(e){
+  e.preventDefault();
+  window.open(waLink(currentLang==='ur' ? 'السلام علیکم، مجھے حٹ بکنگ میں دلچسپی ہے۔' : 'Hello, I am interested in booking a hut.'), '_blank');
+});
+
+/* =============== INIT =============== */
+updateAdminUI();
+applyLang(currentLang);
+</script>
+</body>
+</html>
